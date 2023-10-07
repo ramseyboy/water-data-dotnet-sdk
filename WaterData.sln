@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterData", "WaterData\WaterData.csproj", "{02CDF40B-2C28-43F4-99A6-33DFE207397A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterData.Tests", "WaterData.Tests\WaterData.Tests.csproj", "{4DC8F0E8-352E-45D9-85FF-C4AE84458FCC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02CDF40B-2C28-43F4-99A6-33DFE207397A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02CDF40B-2C28-43F4-99A6-33DFE207397A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02CDF40B-2C28-43F4-99A6-33DFE207397A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02CDF40B-2C28-43F4-99A6-33DFE207397A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DC8F0E8-352E-45D9-85FF-C4AE84458FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DC8F0E8-352E-45D9-85FF-C4AE84458FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DC8F0E8-352E-45D9-85FF-C4AE84458FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DC8F0E8-352E-45D9-85FF-C4AE84458FCC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
