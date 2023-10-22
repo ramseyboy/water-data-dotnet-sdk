@@ -4,8 +4,10 @@ namespace WaterData.Models.Codes;
 
 public struct NwisLocalAquiferCode: NwisCode
 {
-    [Name("")]
+    [Name("aqfr_cd")]
     public string Code { get; set; }
-    [Name("")]
+    [Name("aqfr_nm")]
     public string Label { get; set; }
+    [Name("state_cd")]
+    public string StateCode { get; set; }
 }

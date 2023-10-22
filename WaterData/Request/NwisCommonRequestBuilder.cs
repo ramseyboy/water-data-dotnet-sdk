@@ -1,12 +1,10 @@
 ﻿using System.Text;
 using WaterData.Models.Codes;
 
-namespace WaterData.Parameters;
+namespace WaterData.Request;
 
-public abstract class NwisCommonParametersBuilder<T>: IParametersBuilder where T: IParametersBuilder
+public abstract class NwisCommonRequestBuilder<TResult, TBuilder>: IWaterDataRequestBuilder<TResult> where TBuilder: IWaterDataRequestBuilder<TResult>
 {
-    public string ApiUrl => "https://waterservices.usgs.gov/nwis";
-
     [NwisQueryParameter("outputDataTypeCd", NwisParameterType.Output)]
     protected NwisDataCollectionTypeCode? _dataCollectionTypeCode;
 
@@ -16,11 +14,11 @@ public abstract class NwisCommonParametersBuilder<T>: IParametersBuilder where T
     [NwisQueryParameter("seriesCatalogOutput", NwisParameterType.Output)]
     protected bool _seriesCatalogOutput = false;
 
-    public abstract T DataCollectionTypeCode(NwisDataCollectionTypeCode dataCollectionTypeCode);
+    public abstract TBuilder DataCollectionTypeCode(NwisDataCollectionTypeCode dataCollectionTypeCode);
 
-    public abstract T SeriesCatalogOutput(bool seriesCatalogOutput);
+    public abstract TBuilder SeriesCatalogOutput(bool seriesCatalogOutput);
 
-    public abstract NwisParameters BuildParameters();
+    public abstract IWaterDataRequest<TResult> BuildRequest();
 
     protected string BuildCommonParameters()
     {

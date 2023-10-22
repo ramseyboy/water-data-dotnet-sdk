@@ -1,4 +1,4 @@
-﻿namespace WaterData.Parameters;
+﻿namespace WaterData.Request;
 
 public enum NwisParameterType
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace WaterData.Parameters.Site;
+namespace WaterData.Request.Site;
 
 public enum NwisSiteStatus
 {

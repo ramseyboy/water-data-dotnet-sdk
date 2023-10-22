@@ -23,6 +23,21 @@
     <EmbeddedResource Include="Resources\state_codes.tsv" />
     <None Remove="Resources\hydrologic_unit_codes.tsv" />
     <EmbeddedResource Include="Resources\hydrologic_unit_codes.tsv" />
+    <None Remove="Resources\agency_cd_query.tsv" />
+    <EmbeddedResource Include="Resources\agency_cd_query.tsv" />
+    <None Remove="Resources\aqfr_cd_query.tsv" />
+    <EmbeddedResource Include="Resources\aqfr_cd_query.tsv" />
+    <None Remove="Resources\data_collection_cd.tsv" />
+    <EmbeddedResource Include="Resources\data_collection_cd.tsv" />
+    <None Remove="Resources\nat_aqfr_query.tsv" />
+    <EmbeddedResource Include="Resources\nat_aqfr_query.tsv" />
+    <None Remove="Resources\parameter_cd_query.tsv" />
+    <EmbeddedResource Include="Resources\parameter_cd_query.tsv" />
+    <None Remove="Resources\site_tp_query.tsv" />
+    <EmbeddedResource Include="Resources\site_tp_query.tsv" />
+
+
+
 
 
 

@@ -1,24 +1,25 @@
 ﻿using System.Reflection;
 using System.Text;
 using NetTopologySuite.Geometries;
-using WaterData.Extensions;
 using WaterData.Exceptions;
+using WaterData.Extensions;
+using WaterData.Models;
 using WaterData.Models.Codes;
 
-namespace WaterData.Parameters.Site;
+namespace WaterData.Request.Site;
 
-public class NwisSiteParametersBuilder: NwisCommonParametersBuilder<NwisSiteParametersBuilder>
+public class NwisSiteRequestBuilder: NwisCommonRequestBuilder<NwisSite, NwisSiteRequestBuilder>
 {
     private const string UrlPath = "/site";
 
     [NwisQueryParameter("stateCd", NwisParameterType.Major)]
-    private NwisStateCode? _stateCode;
+    private NwisCode? _stateCode;
 
     [NwisQueryParameter("countyCd", NwisParameterType.Major)]
-    private ICollection<string>? _countyCodes;
+    private ICollection<NwisCode>? _countyCodes;
 
     [NwisQueryParameter("huc", NwisParameterType.Major)]
-    private ICollection<string>? _hydrologicUnitCodes;
+    private ICollection<NwisCode>? _hydrologicUnitCodes;
 
     [NwisQueryParameter("sites", NwisParameterType.Major)]
     private ICollection<string>? _siteNumbers;
@@ -51,16 +52,16 @@ public class NwisSiteParametersBuilder: NwisCommonParametersBuilder<NwisSitePara
     private NwisSiteStatus _siteStatus = NwisSiteStatus.All;
 
     [NwisQueryParameter("siteType", NwisParameterType.Minor)]
-    private ICollection<NwisSiteType>? _siteTypes;
+    private ICollection<NwisCode>? _siteTypes;
 
     [NwisQueryParameter("hasDataTypeCd", NwisParameterType.Minor)]
-    private NwisDataCollectionTypeCode? _hasDataTypeCode;
+    private NwisCode? _hasDataTypeCode;
 
     [NwisQueryParameter("parameterCd", NwisParameterType.Minor)]
-    private NwisParameterCode? _parameterCode;
+    private NwisCode? _parameterCode;
 
     [NwisQueryParameter("agencyCd", NwisParameterType.Minor)]
-    private NwisAgencyCode? _agencyCode;
+    private NwisCode? _agencyCode;
 
     [NwisQueryParameter("altMin", NwisParameterType.Minor)]
     private double? _altMin;
@@ -75,10 +76,10 @@ public class NwisSiteParametersBuilder: NwisCommonParametersBuilder<NwisSitePara
     private double? _drainAreaMax;
 
     [NwisQueryParameter("aquiferCd", NwisParameterType.Minor)]
-    private NwisAquiferCode? _aquiferCode;
+    private NwisCode? _aquiferCode;
 
     [NwisQueryParameter("localAquiferCd", NwisParameterType.Minor)]
-    private NwisLocalAquiferCode? _localAquiferCode;
+    private NwisCode? _localAquiferCode;
 
     [NwisQueryParameter("wellDepthMin", NwisParameterType.Minor)]
     private double? _wellDepthMin;
@@ -92,59 +93,59 @@ public class NwisSiteParametersBuilder: NwisCommonParametersBuilder<NwisSitePara
     [NwisQueryParameter("holeDepthMax", NwisParameterType.Minor)]
     private double? _holeDepthMax;
 
-    public NwisSiteParametersBuilder()
+    internal NwisSiteRequestBuilder()
     {
     }
 
-    public NwisSiteParametersBuilder StateCode(NwisStateCode stateCode)
+    public NwisSiteRequestBuilder StateCode(NwisStateCode stateCode)
     {
         _stateCode = stateCode;
         return this;
     }
 
-    public NwisSiteParametersBuilder CountyCode(params string[] countyCodes)
+    public NwisSiteRequestBuilder CountyCode(params NwisCode[] countyCodes)
     {
-        if (countyCodes is null || countyCodes.Length == 0 || countyCodes.Any(string.IsNullOrEmpty))
+        if (countyCodes is null || countyCodes.Length == 0 || countyCodes.Any(c => string.IsNullOrEmpty(c.Code)))
         {
-            throw new ParameterException("countyCodes parameter cannot be empty", nameof(countyCodes));
+            throw new RequestBuilderException("countyCodes parameter cannot be empty", nameof(countyCodes));
         }
 
         if (countyCodes.Length > 20)
         {
-            throw new ParameterException($"Cannot pass more than 20 countyCodes, found {countyCodes.Length}", nameof(countyCodes));
+            throw new RequestBuilderException($"Cannot pass more than 20 countyCodes, found {countyCodes.Length}", nameof(countyCodes));
         }
 
         _countyCodes = countyCodes;
         return this;
     }
 
-    public NwisSiteParametersBuilder HydrologicUnitCode(params string[] hydrologicUnitCodes)
+    public NwisSiteRequestBuilder HydrologicUnitCode(params NwisCode[] hydrologicUnitCodes)
     {
-        if (hydrologicUnitCodes is null || hydrologicUnitCodes.Length == 0 || hydrologicUnitCodes.Any(string.IsNullOrEmpty))
+        if (hydrologicUnitCodes is null || hydrologicUnitCodes.Length == 0 || hydrologicUnitCodes.Any(c => string.IsNullOrEmpty(c.Code)))
         {
-            throw new ParameterException("hydrologicUnitCodes parameter cannot be empty or contain empty strings", nameof(hydrologicUnitCodes));
+            throw new RequestBuilderException("hydrologicUnitCodes parameter cannot be empty or contain empty strings", nameof(hydrologicUnitCodes));
         }
 
-        var majorCodeCount = hydrologicUnitCodes.Count(c => c.Length == 2);
-        var minorCodeCount = hydrologicUnitCodes.Count(c => c.Length == 8);
+        var majorCodeCount = hydrologicUnitCodes.Count(c => c.Code.Length == 2);
+        var minorCodeCount = hydrologicUnitCodes.Count(c => c.Code.Length == 8);
 
         if (majorCodeCount == 0 && minorCodeCount == 0)
         {
-            throw new ParameterException(
+            throw new RequestBuilderException(
                 $@"hydrologicUnitCodes must be 2 chars for major code
                         and 8 chars for minor code, found no valid codes
-                        in {string.Join(',', hydrologicUnitCodes)}", nameof(hydrologicUnitCodes));
+                        in {string.Join(',', hydrologicUnitCodes.Select(c => c.Code))}", nameof(hydrologicUnitCodes));
         }
 
         if (majorCodeCount > 1)
         {
-            throw new ParameterException(
+            throw new RequestBuilderException(
                 $@"Only allowed 1 major 2 digit hydrologicUnitCode, found {majorCodeCount}", nameof(hydrologicUnitCodes));
         }
 
         if (minorCodeCount > 10)
         {
-            throw new ParameterException(
+            throw new RequestBuilderException(
                 $@"Only allowed 10 minor 8 digit hydrologicUnitCode, found {minorCodeCount}", nameof(hydrologicUnitCodes));
         }
 
@@ -152,173 +153,173 @@ public class NwisSiteParametersBuilder: NwisCommonParametersBuilder<NwisSitePara
         return this;
     }
 
-    public NwisSiteParametersBuilder SiteNumbers(params string[] siteNumbers)
+    public NwisSiteRequestBuilder SiteNumbers(params string[] siteNumbers)
     {
         if (siteNumbers is null || siteNumbers.Length == 0 || siteNumbers.Any(string.IsNullOrEmpty))
         {
-            throw new ParameterException("siteNumbers parameter cannot be empty", nameof(siteNumbers));
+            throw new RequestBuilderException("siteNumbers parameter cannot be empty", nameof(siteNumbers));
         }
         _siteNumbers = siteNumbers;
         return this;
     }
 
-    public NwisSiteParametersBuilder BoundingBox(Envelope boundingBox)
+    public NwisSiteRequestBuilder BoundingBox(Envelope boundingBox)
     {
         _boundingBox = boundingBox;
         return this;
     }
 
-    public NwisSiteParametersBuilder SiteOutput(NwisSiteOutput siteOutput)
+    public NwisSiteRequestBuilder SiteOutput(NwisSiteOutput siteOutput)
     {
         _siteOutput = siteOutput;
         return this;
     }
 
-    public NwisSiteParametersBuilder StartDate(DateTime startDate)
+    public NwisSiteRequestBuilder StartDate(DateTime startDate)
     {
         _startDate = startDate;
         return this;
     }
 
-    public NwisSiteParametersBuilder EndDate(DateTime endDate)
+    public NwisSiteRequestBuilder EndDate(DateTime endDate)
     {
         _endDate = endDate;
         return this;
     }
 
-    public NwisSiteParametersBuilder Period(TimeSpan period)
+    public NwisSiteRequestBuilder Period(TimeSpan period)
     {
         _period = period;
         return this;
     }
 
-    public NwisSiteParametersBuilder ModifiedSince(TimeSpan modifiedSince)
+    public NwisSiteRequestBuilder ModifiedSince(TimeSpan modifiedSince)
     {
         _modifiedSince = modifiedSince;
         return this;
     }
 
-    public NwisSiteParametersBuilder SiteName(string siteName)
+    public NwisSiteRequestBuilder SiteName(string siteName)
     {
         _siteName = siteName;
         return this;
     }
 
-    public NwisSiteParametersBuilder SiteNameMatchOperator(NwisSiteNameMatch siteNameMatchOperator)
+    public NwisSiteRequestBuilder SiteNameMatchOperator(NwisSiteNameMatch siteNameMatchOperator)
     {
         _siteNameMatchOperator = siteNameMatchOperator;
         return this;
     }
 
-    public NwisSiteParametersBuilder SiteStatus(NwisSiteStatus siteStatus)
+    public NwisSiteRequestBuilder SiteStatus(NwisSiteStatus siteStatus)
     {
         _siteStatus = siteStatus;
         return this;
     }
 
-    public NwisSiteParametersBuilder SiteTypes(params NwisSiteType[] siteTypes)
+    public NwisSiteRequestBuilder SiteTypes(params NwisCode[] siteTypes)
     {
         _siteTypes = siteTypes.ToList();
         return this;
     }
 
-    public NwisSiteParametersBuilder HasDataTypeCode(NwisDataCollectionTypeCode hasDataTypeCode)
+    public NwisSiteRequestBuilder HasDataTypeCode(NwisCode hasDataTypeCode)
     {
         _hasDataTypeCode = hasDataTypeCode;
         return this;
     }
 
-    public NwisSiteParametersBuilder ParameterCode(NwisParameterCode parameterCode)
+    public NwisSiteRequestBuilder ParameterCode(NwisCode parameterCode)
     {
         _parameterCode = parameterCode;
         return this;
     }
 
-    public NwisSiteParametersBuilder AgencyCode(NwisAgencyCode agencyCode)
+    public NwisSiteRequestBuilder AgencyCode(NwisCode agencyCode)
     {
         _agencyCode = agencyCode;
         return this;
     }
 
-    public NwisSiteParametersBuilder MinimumAltitude(double altMin)
+    public NwisSiteRequestBuilder MinimumAltitude(double altMin)
     {
         _altMin = altMin;
         return this;
     }
 
-    public NwisSiteParametersBuilder MaximumAltitude(double altMax)
+    public NwisSiteRequestBuilder MaximumAltitude(double altMax)
     {
         _altMax = altMax;
         return this;
     }
 
-    public NwisSiteParametersBuilder MinimumDrainageArea(double drainAreaMin)
+    public NwisSiteRequestBuilder MinimumDrainageArea(double drainAreaMin)
     {
         _drainAreaMin = drainAreaMin;
         return this;
     }
 
-    public NwisSiteParametersBuilder MaximumDrainageArea(double drainAreaMax)
+    public NwisSiteRequestBuilder MaximumDrainageArea(double drainAreaMax)
     {
         _drainAreaMax = drainAreaMax;
         return this;
     }
 
-    public NwisSiteParametersBuilder AquiferCode(NwisAquiferCode aquiferCode)
+    public NwisSiteRequestBuilder AquiferCode(NwisCode aquiferCode)
     {
         _aquiferCode = aquiferCode;
         return this;
     }
 
-    public NwisSiteParametersBuilder LocalAquiferCode(NwisLocalAquiferCode localAquiferCode)
+    public NwisSiteRequestBuilder LocalAquiferCode(NwisCode localAquiferCode)
     {
         _localAquiferCode = localAquiferCode;
         return this;
     }
 
-    public NwisSiteParametersBuilder MinimumWellDepth(double wellDepthMin)
+    public NwisSiteRequestBuilder MinimumWellDepth(double wellDepthMin)
     {
         _wellDepthMin = wellDepthMin;
         return this;
     }
 
-    public NwisSiteParametersBuilder MaximumWellDepth(double wellDepthMax)
+    public NwisSiteRequestBuilder MaximumWellDepth(double wellDepthMax)
     {
         _wellDepthMax = wellDepthMax;
         return this;
     }
 
-    public NwisSiteParametersBuilder MinimumHoleDepth(double holeDepthMin)
+    public NwisSiteRequestBuilder MinimumHoleDepth(double holeDepthMin)
     {
         _holeDepthMin = holeDepthMin;
         return this;
     }
 
-    public NwisSiteParametersBuilder MaximumHoleDepth(double holeDepthMax)
+    public NwisSiteRequestBuilder MaximumHoleDepth(double holeDepthMax)
     {
         _holeDepthMax = holeDepthMax;
         return this;
     }
 
-    public override NwisSiteParametersBuilder DataCollectionTypeCode(NwisDataCollectionTypeCode dataCollectionTypeCode)
+    public override NwisSiteRequestBuilder DataCollectionTypeCode(NwisDataCollectionTypeCode dataCollectionTypeCode)
     {
         _dataCollectionTypeCode = dataCollectionTypeCode;
         return this;
     }
 
-    public override NwisSiteParametersBuilder SeriesCatalogOutput(bool seriesCatalogOutput)
+    public override NwisSiteRequestBuilder SeriesCatalogOutput(bool seriesCatalogOutput)
     {
         _seriesCatalogOutput = seriesCatalogOutput;
         return this;
     }
 
-    public override NwisParameters BuildParameters()
+    public override IWaterDataRequest<NwisSite> BuildRequest()
     {
         var fieldDict = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
             .Where(f => f.GetValue(this) is not null)
             .ToDictionary(
                 fi => fi.Name,
-                fi => fi.GetCustomAttribute(typeof(NwisQueryParameterAttribute)) as NwisQueryParameterAttribute ?? throw new ParameterException("Nwis Parameters must be annotation with the 'NwisQueryParameter' attribute"));
+                fi => fi.GetCustomAttribute(typeof(NwisQueryParameterAttribute)) as NwisQueryParameterAttribute ?? throw new RequestBuilderException("Nwis Parameters must be annotation with the 'NwisQueryParameter' attribute"));
 
         var majorParamsCount = fieldDict.Values.Count(f => f.ParameterType == NwisParameterType.Major);
         if (majorParamsCount > 1)
@@ -327,7 +328,7 @@ public class NwisSiteParametersBuilder: NwisCommonParametersBuilder<NwisSitePara
                 .Where(f => f.ParameterType == NwisParameterType.Major)
                 .Select(f => f.Name)
                 .ToList();
-            throw new ParameterException(
+            throw new RequestBuilderException(
             $@"Only 1 major parameter allowed in NWIS requests,
                     found {majorParamsCount}.Choose 1 of {string.Join(',', agg)}");
         }
@@ -335,19 +336,19 @@ public class NwisSiteParametersBuilder: NwisCommonParametersBuilder<NwisSitePara
         var sb = new StringBuilder();
         if (_countyCodes is not null && _countyCodes.Count > 0)
         {
-            sb.Append($"{fieldDict[nameof(_countyCodes)].Name}={string.Join(',', _countyCodes.SelectNonEmpty())}");
+            sb.Append($"{fieldDict[nameof(_countyCodes)].Name}={string.Join(',', _countyCodes.Select(c => c.Code).ToList().SelectNonEmpty())}");
             sb.Append('&');
         }
 
-        if (_stateCode is not null && !string.IsNullOrEmpty(_stateCode.Value.Code))
+        if (_stateCode is not null && !string.IsNullOrEmpty(_stateCode.Code))
         {
-            sb.Append($"{fieldDict[nameof(_stateCode)].Name}={string.Join(',', _stateCode.Value.Code)}");
+            sb.Append($"{fieldDict[nameof(_stateCode)].Name}={string.Join(',', _stateCode.Code)}");
             sb.Append('&');
         }
 
         if (_hydrologicUnitCodes is not null && _hydrologicUnitCodes.Count > 0)
         {
-            sb.Append($"{fieldDict[nameof(_hydrologicUnitCodes)].Name}={string.Join(',', _hydrologicUnitCodes.SelectNonEmpty())}");
+            sb.Append($"{fieldDict[nameof(_hydrologicUnitCodes)].Name}={string.Join(',', _hydrologicUnitCodes.Select(c => c.Code).ToList().SelectNonEmpty())}");
             sb.Append('&');
         }
 
@@ -367,11 +368,11 @@ public class NwisSiteParametersBuilder: NwisCommonParametersBuilder<NwisSitePara
 
         sb.Append(BuildCommonParameters());
 
-        var builder = new UriBuilder($"{ApiUrl}{UrlPath}")
+        var builder = new UriBuilder($"{NwisRequestBuilder.ApiUrl}{UrlPath}")
         {
             Query = sb.ToString()
         };
 
-        return new NwisParameters(builder.Uri);
+        return new NwisHttpRequest<NwisSite>(builder.Uri);
     }
 }

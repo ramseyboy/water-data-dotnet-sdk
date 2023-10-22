@@ -19,10 +19,10 @@ namespace WaterData.Models.Codes;
 /// </summary>
 public struct NwisAquiferCode: NwisCode
 {
-    [Name("code")]
+    [Name("nat_aqfr_cd")]
     public string Code { get; set; }
-    [Name("aquifer_name")]
+    [Name("nat_aqfr_nm")]
     public string Label { get; set; }
-    [Name("valid_states")]
-    public string ValidStates { get; set; }
+    [Name("state_cd")]
+    public string StateCode { get; set; }
 }

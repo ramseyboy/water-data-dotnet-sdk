@@ -1,9 +1,10 @@
 ﻿using WaterData.Models.Codes;
-using WaterData.Parameters.Site;
+using WaterData.Request;
+using WaterData.Request.Site;
 
 namespace WaterData.Tests.Parameters;
 
-public class NwisSiteParametersBuilderTest
+public class NwisSiteRequestBuilderTest
 {
     [Fact(DisplayName =
         "Given a state code and no other parameters, When a parameters are built, Then the resulting Uri should have the given state code")]
@@ -14,14 +15,15 @@ public class NwisSiteParametersBuilderTest
             Code = "TX",
             Label = "Texas"
         };
-        var uri = new NwisSiteParametersBuilder()
+        var request = NwisRequestBuilder
+            .Builder()
+            .Sites()
             .StateCode(code)
-            .BuildParameters();
+            .BuildRequest();
 
-        Assert.NotNull(uri);
-        Assert.NotNull(uri.Uri);
-        Assert.NotNull(uri.Uri.Query);
-        Assert.Contains("TX", uri.Uri.Query, StringComparison.InvariantCultureIgnoreCase);
+        Assert.NotNull(request);
+        Assert.NotNull(request);
+        Assert.Contains("TX", request.Uri.Query, StringComparison.InvariantCultureIgnoreCase);
     }
 
 }
