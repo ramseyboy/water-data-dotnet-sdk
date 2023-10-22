@@ -312,7 +312,7 @@ public class NwisSiteRequestBuilder: IWaterDataRequestBuilder<NwisSite>
         return this;
     }
 
-    public NwisSiteRequestBuilder DataCollectionTypeCode(NwisDataCollectionTypeCode dataCollectionTypeCode)
+    public NwisSiteRequestBuilder DataCollectionTypeCode(NwisCode dataCollectionTypeCode)
     {
         _dataCollectionTypeCode = dataCollectionTypeCode;
         return this;
