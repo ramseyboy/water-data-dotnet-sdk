@@ -145,4 +145,17 @@ public class NwisRequestBuilderTest
         Assert.NotNull(codes);
         Assert.NotEmpty(codes);
     }
+
+    [Fact(DisplayName = "Given a valid request for data collection codes only for organics, When sent, Then a list of valid 'NwisCode' should be returned")]
+    public async Task TestGetDataCollectionCodes()
+    {
+        var request = NwisRequestBuilder
+            .Builder()
+            .DataCollectionTypeCodes()
+            .BuildRequest();
+
+        var codes = await request.GetAsync();
+        Assert.NotNull(codes);
+        Assert.NotEmpty(codes);
+    }
 }

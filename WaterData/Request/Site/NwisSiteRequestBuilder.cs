@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System.Globalization;
+using System.Reflection;
 using System.Text;
+using System.Xml;
 using NetTopologySuite.Geometries;
 using WaterData.Exceptions;
 using WaterData.Extensions;
@@ -8,7 +10,7 @@ using WaterData.Models.Codes;
 
 namespace WaterData.Request.Site;
 
-public class NwisSiteRequestBuilder: NwisCommonRequestBuilder<NwisSite, NwisSiteRequestBuilder>
+public class NwisSiteRequestBuilder: IWaterDataRequestBuilder<NwisSite>
 {
     private const string UrlPath = "/site";
 
@@ -92,6 +94,15 @@ public class NwisSiteRequestBuilder: NwisCommonRequestBuilder<NwisSite, NwisSite
 
     [NwisQueryParameter("holeDepthMax", NwisParameterType.Minor)]
     private double? _holeDepthMax;
+
+    [NwisQueryParameter("outputDataTypeCd", NwisParameterType.Output)]
+    private NwisCode? _dataCollectionTypeCode;
+
+    [NwisQueryParameter("format", NwisParameterType.Output)]
+    private string? _format = "rdb";
+
+    [NwisQueryParameter("seriesCatalogOutput", NwisParameterType.Output)]
+    private bool _seriesCatalogOutput = false;
 
     internal NwisSiteRequestBuilder()
     {
@@ -301,19 +312,19 @@ public class NwisSiteRequestBuilder: NwisCommonRequestBuilder<NwisSite, NwisSite
         return this;
     }
 
-    public override NwisSiteRequestBuilder DataCollectionTypeCode(NwisDataCollectionTypeCode dataCollectionTypeCode)
+    public NwisSiteRequestBuilder DataCollectionTypeCode(NwisDataCollectionTypeCode dataCollectionTypeCode)
     {
         _dataCollectionTypeCode = dataCollectionTypeCode;
         return this;
     }
 
-    public override NwisSiteRequestBuilder SeriesCatalogOutput(bool seriesCatalogOutput)
+    public NwisSiteRequestBuilder SeriesCatalogOutput(bool seriesCatalogOutput)
     {
         _seriesCatalogOutput = seriesCatalogOutput;
         return this;
     }
 
-    public override IWaterDataRequest<NwisSite> BuildRequest()
+    public IWaterDataRequest<NwisSite> BuildRequest()
     {
         var fieldDict = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
             .Where(f => f.GetValue(this) is not null)
@@ -364,9 +375,143 @@ public class NwisSiteRequestBuilder: NwisCommonRequestBuilder<NwisSite, NwisSite
             sb.Append('&');
         }
 
-        sb.Append($"{fieldDict[nameof(_siteOutput)].Name}={_siteOutput.GetDescription()}");
+        if ((_startDate is not null && _endDate is null) || (_startDate is null && _endDate is not null))
+        {
+            throw new RequestBuilderException("When startDate or endDate is provided you must also provide the complementary value.");
+        }
 
-        sb.Append(BuildCommonParameters());
+        if (_startDate is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_startDate)].Name}={_startDate.Value.Date.ToString("o", CultureInfo.InvariantCulture)}");
+            sb.Append('&');
+        }
+
+        if (_endDate is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_endDate)].Name}={_endDate.Value.Date.ToString("o", CultureInfo.InvariantCulture)}");
+            sb.Append('&');
+        }
+
+        if (_period is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_period)].Name}={XmlConvert.ToString(_period.Value)}");
+            sb.Append('&');
+        }
+
+        if (_modifiedSince is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_modifiedSince)].Name}={XmlConvert.ToString(_modifiedSince.Value)}");
+            sb.Append('&');
+        }
+
+        if (!string.IsNullOrEmpty(_siteName))
+        {
+            sb.Append($"{fieldDict[nameof(_siteName)].Name}={_siteName}");
+            sb.Append('&');
+            if (_siteNameMatchOperator is not null)
+            {
+                sb.Append($"{fieldDict[nameof(_siteNameMatchOperator)].Name}={_siteNameMatchOperator.Value.GetDescription()}");
+                sb.Append('&');
+            }
+        }
+
+        if (_siteTypes is not null && _siteTypes.Count > 0)
+        {
+            sb.Append($"{fieldDict[nameof(_siteTypes)].Name}={string.Join(',', _siteTypes.Select(c => c.Code).ToList().SelectNonEmpty())}");
+            sb.Append('&');
+        }
+
+        if (_hasDataTypeCode is not null && !string.IsNullOrEmpty(_hasDataTypeCode.Code))
+        {
+            sb.Append($"{fieldDict[nameof(_hasDataTypeCode)].Name}={_hasDataTypeCode.Code}");
+            sb.Append('&');
+        }
+
+        if (_parameterCode is not null && !string.IsNullOrEmpty(_parameterCode.Code))
+        {
+            sb.Append($"{fieldDict[nameof(_parameterCode)].Name}={_parameterCode.Code}");
+            sb.Append('&');
+        }
+
+        if (_agencyCode is not null && !string.IsNullOrEmpty(_agencyCode.Code))
+        {
+            sb.Append($"{fieldDict[nameof(_agencyCode)].Name}={_agencyCode.Code}");
+            sb.Append('&');
+        }
+
+        if (_altMin is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_altMin)].Name}={_altMin}");
+            sb.Append('&');
+        }
+
+        if (_altMax is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_altMax)].Name}={_altMax}");
+            sb.Append('&');
+        }
+
+        if (_drainAreaMin is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_drainAreaMin)].Name}={_drainAreaMin}");
+            sb.Append('&');
+        }
+
+        if (_drainAreaMax is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_drainAreaMax)].Name}={_drainAreaMax}");
+            sb.Append('&');
+        }
+
+        if (_aquiferCode is not null && !string.IsNullOrEmpty(_aquiferCode.Code))
+        {
+            sb.Append($"{fieldDict[nameof(_aquiferCode)].Name}={_aquiferCode.Code}");
+            sb.Append('&');
+        }
+
+        if (_localAquiferCode is not null && !string.IsNullOrEmpty(_localAquiferCode.Code))
+        {
+            sb.Append($"{fieldDict[nameof(_localAquiferCode)].Name}={_localAquiferCode.Code}");
+            sb.Append('&');
+        }
+
+        if (_wellDepthMin is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_wellDepthMin)].Name}={_wellDepthMin}");
+            sb.Append('&');
+        }
+
+        if (_wellDepthMax is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_wellDepthMax)].Name}={_wellDepthMax}");
+            sb.Append('&');
+        }
+
+        if (_holeDepthMin is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_holeDepthMin)].Name}={_holeDepthMin}");
+            sb.Append('&');
+        }
+
+        if (_holeDepthMax is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_holeDepthMax)].Name}={_holeDepthMax}");
+            sb.Append('&');
+        }
+
+        if (_dataCollectionTypeCode is not null)
+        {
+            sb.Append($"{fieldDict[nameof(_dataCollectionTypeCode)].Name}={_dataCollectionTypeCode.Code}");
+            sb.Append('&');
+        }
+
+        sb.Append($"{fieldDict[nameof(_siteStatus)].Name}={_siteStatus.GetDescription()}");
+        sb.Append('&');
+        sb.Append($"{fieldDict[nameof(_siteOutput)].Name}={_siteOutput.GetDescription()}");
+        sb.Append('&');
+        sb.Append($"{fieldDict[nameof(_format)].Name}={_format}");
+        sb.Append('&');
+        sb.Append($"{fieldDict[nameof(_seriesCatalogOutput)].Name}={_seriesCatalogOutput.ToString().ToLowerInvariant()}");
 
         var builder = new UriBuilder($"{NwisRequestBuilder.ApiUrl}{UrlPath}")
         {
