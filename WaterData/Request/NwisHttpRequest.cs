@@ -9,7 +9,7 @@ public class NwisHttpRequest<T>: IWaterDataRequest<T>
 
     private readonly HttpClient _httpClient;
 
-    internal NwisHttpRequest(Uri uri)
+    public NwisHttpRequest(Uri uri)
     {
         Uri = uri;
 
