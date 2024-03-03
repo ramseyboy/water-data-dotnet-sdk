@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <OutputType>Library</OutputType>
+        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,16 +24,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\WaterData\WaterData.csproj" />
+        <ProjectReference Include="..\WaterData\WaterData.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Resources\sites.rdb" />
-      <EmbeddedResource Include="Resources\sites.rdb">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
+        <None Remove="Resources\sites.rdb"/>
+        <EmbeddedResource Include="Resources\sites.rdb">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </EmbeddedResource>
     </ItemGroup>
-
-
 
 </Project>

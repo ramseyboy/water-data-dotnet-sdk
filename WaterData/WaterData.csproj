@@ -1,54 +1,38 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="30.0.1" />
-    <PackageReference Include="NetTopologySuite" Version="2.5.0" />
-    <PackageReference Include="Refit" Version="7.0.0" />
-    <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
-    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-  </ItemGroup>
-
-
-
-  <ItemGroup>
-    <None Remove="Resources\county_codes.tsv" />
-    <EmbeddedResource Include="Resources\county_codes.tsv" />
-    <None Remove="Resources\state-codes.tsv" />
-    <EmbeddedResource Include="Resources\state_codes.tsv" />
-    <None Remove="Resources\hydrologic_unit_codes.tsv" />
-    <EmbeddedResource Include="Resources\hydrologic_unit_codes.tsv" />
-    <None Remove="Resources\agency_cd_query.tsv" />
-    <EmbeddedResource Include="Resources\agency_cd_query.tsv" />
-    <None Remove="Resources\aqfr_cd_query.tsv" />
-    <EmbeddedResource Include="Resources\aqfr_cd_query.tsv" />
-    <None Remove="Resources\data_collection_cd.tsv" />
-    <EmbeddedResource Include="Resources\data_collection_cd.tsv" />
-    <None Remove="Resources\nat_aqfr_query.tsv" />
-    <EmbeddedResource Include="Resources\nat_aqfr_query.tsv" />
-    <None Remove="Resources\parameter_cd_query.tsv" />
-    <EmbeddedResource Include="Resources\parameter_cd_query.tsv" />
-    <None Remove="Resources\site_tp_query.tsv" />
-    <EmbeddedResource Include="Resources\site_tp_query.tsv" />
+    <ItemGroup>
+        <PackageReference Include="CsvHelper" Version="30.0.1"/>
+        <PackageReference Include="NetTopologySuite" Version="2.5.0"/>
+        <PackageReference Include="Refit" Version="7.0.0"/>
+        <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0"/>
+        <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
+    </ItemGroup>
 
 
-
-
-
-
-  </ItemGroup>
-
-
-
-
-
-
-
-
-
+    <ItemGroup>
+        <None Remove="Resources\county_codes.tsv"/>
+        <EmbeddedResource Include="Resources\county_codes.tsv"/>
+        <None Remove="Resources\state-codes.tsv"/>
+        <EmbeddedResource Include="Resources\state_codes.tsv"/>
+        <None Remove="Resources\hydrologic_unit_codes.tsv"/>
+        <EmbeddedResource Include="Resources\hydrologic_unit_codes.tsv"/>
+        <None Remove="Resources\agency_cd_query.tsv"/>
+        <EmbeddedResource Include="Resources\agency_cd_query.tsv"/>
+        <None Remove="Resources\aqfr_cd_query.tsv"/>
+        <EmbeddedResource Include="Resources\aqfr_cd_query.tsv"/>
+        <None Remove="Resources\data_collection_cd.tsv"/>
+        <EmbeddedResource Include="Resources\data_collection_cd.tsv"/>
+        <None Remove="Resources\nat_aqfr_query.tsv"/>
+        <EmbeddedResource Include="Resources\nat_aqfr_query.tsv"/>
+        <None Remove="Resources\parameter_cd_query.tsv"/>
+        <EmbeddedResource Include="Resources\parameter_cd_query.tsv"/>
+        <None Remove="Resources\site_tp_query.tsv"/>
+        <EmbeddedResource Include="Resources\site_tp_query.tsv"/>
+    </ItemGroup>
 </Project>
