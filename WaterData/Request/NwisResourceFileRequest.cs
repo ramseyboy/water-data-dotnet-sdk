@@ -18,14 +18,19 @@ public class NwisResourceFileRequest<T>: IWaterDataRequest<T>
 
     public Uri Uri => new($"file://{_fileName}");
 
-    public async Task<List<T>> GetAsync(CancellationToken cancellationToken = new ())
+    public async Task<IEnumerable<T>> GetAsync(CancellationToken cancellationToken = new ())
     {
-        var stream = await Assembly.GetExecutingAssembly().GetResourceStream(_fileName);
+        var stream = await GetStreamAsync(cancellationToken);
         var codes = await RdbReader.ReadAsync<T>(stream, cancellationToken);
         if (_whereClauseDelegate is not null)
         {
             codes = codes.Where(_whereClauseDelegate).ToList();
         }
         return codes.ToList();
+    }
+
+    public async Task<Stream> GetStreamAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        return await Assembly.GetExecutingAssembly().GetResourceStream(_fileName);
     }
 }

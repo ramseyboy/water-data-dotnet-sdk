@@ -7,7 +7,7 @@ namespace WaterData.Serializers;
 
 public static class RdbReader
 {
-    public static async Task<List<T>> ReadAsync<T>(Stream stream, CancellationToken cancellationToken = new())
+    public static async Task<IEnumerable<T>> ReadAsync<T>(Stream stream, CancellationToken cancellationToken = new())
     {
         using var reader = new StreamReader(stream);
         var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)

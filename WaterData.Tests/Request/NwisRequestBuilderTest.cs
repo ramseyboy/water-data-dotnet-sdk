@@ -1,7 +1,7 @@
 ﻿using WaterData.Models.Codes;
 using WaterData.Request;
 
-namespace WaterData.Tests.Parameters;
+namespace WaterData.Tests.Request;
 
 public class NwisRequestBuilderTest
 {
@@ -15,7 +15,7 @@ public class NwisRequestBuilderTest
 
         var countyCodes = await countyRequest.GetAsync();
 
-        var travisCountyCode = countyCodes.Find(x => x.Code == "48453");
+        var travisCountyCode = countyCodes.ToList().Find(x => x.Code == "48453");
 
         var request = NwisRequestBuilder
             .Builder()

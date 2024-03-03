@@ -1,8 +1,7 @@
 ﻿using WaterData.Models.Codes;
 using WaterData.Request;
-using WaterData.Request.Site;
 
-namespace WaterData.Tests.Parameters;
+namespace WaterData.Tests.Request;
 
 public class NwisSiteRequestBuilderTest
 {
