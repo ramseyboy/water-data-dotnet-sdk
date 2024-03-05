@@ -109,17 +109,27 @@ public class NwisSiteRequestBuilder : WaterDataRequestBuilder
     {
     }
 
-    public NwisSiteRequestBuilder StateCode(NwisStateCode stateCode)
+    public NwisSiteRequestBuilder StateCode(NwisCode stateCode)
     {
+        if (stateCode is null || string.IsNullOrEmpty(stateCode.Code))
+        {
+            throw new RequestBuilderException("stateCode parameter cannot be empty", nameof(stateCode));
+        }
+
         _stateCode = stateCode;
         return this;
     }
 
     public NwisSiteRequestBuilder CountyCode(params NwisCode[] countyCodes)
     {
-        if (countyCodes is null || countyCodes.Length == 0 || countyCodes.Any(c => string.IsNullOrEmpty(c.Code)))
+        if (countyCodes is null || countyCodes.Length == 0 || countyCodes.Any(c => c is null || string.IsNullOrEmpty(c.Code)))
         {
             throw new RequestBuilderException("countyCodes parameter cannot be empty", nameof(countyCodes));
+        }
+
+        if (countyCodes.Any(c => c.Code.Length != 5))
+        {
+            throw new RequestBuilderException("countyCodes must have length of 5 characters", nameof(countyCodes));
         }
 
         if (countyCodes.Length > 20)
@@ -135,7 +145,7 @@ public class NwisSiteRequestBuilder : WaterDataRequestBuilder
     public NwisSiteRequestBuilder HydrologicUnitCode(params NwisCode[] hydrologicUnitCodes)
     {
         if (hydrologicUnitCodes is null || hydrologicUnitCodes.Length == 0 ||
-            hydrologicUnitCodes.Any(c => string.IsNullOrEmpty(c.Code)))
+            hydrologicUnitCodes.Any(c => c is null || string.IsNullOrEmpty(c.Code)))
         {
             throw new RequestBuilderException("hydrologicUnitCodes parameter cannot be empty or contain empty strings",
                 nameof(hydrologicUnitCodes));
@@ -149,6 +159,14 @@ public class NwisSiteRequestBuilder : WaterDataRequestBuilder
             throw new RequestBuilderException(
                 $@"hydrologicUnitCodes must be 2 chars for major code
                         and 8 chars for minor code, found no valid codes
+                        in {string.Join(',', hydrologicUnitCodes.Select(c => c.Code))}", nameof(hydrologicUnitCodes));
+        }
+
+        if (majorCodeCount + minorCodeCount != hydrologicUnitCodes.Length)
+        {
+            throw new RequestBuilderException(
+                $@"hydrologicUnitCodes must be 2 chars for major code
+                        and 8 chars for minor code, found at least one invalid codes
                         in {string.Join(',', hydrologicUnitCodes.Select(c => c.Code))}", nameof(hydrologicUnitCodes));
         }
 
