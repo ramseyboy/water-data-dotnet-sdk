@@ -4,6 +4,15 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+        <Title>Water Data Dotnet SDK</Title>
+        <Authors>Walker Hannan</Authors>
+        <PackageLicenseUrl> https://licenses.nuget.org/MIT
+ 
+</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/ramseyboy/water-data-dotnet-sdk</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <Version />
+        <PackageId>WaterData.NET.Sdk</PackageId>
     </PropertyGroup>
 
     <ItemGroup>
