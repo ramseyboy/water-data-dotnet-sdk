@@ -1,6 +1,6 @@
 ﻿using NetTopologySuite.Geometries;
-using WaterData.Models.Codes;
-using WaterData.Request;
+using WaterData.Nwis;
+using WaterData.Nwis.Models.Codes;
 
 namespace WaterData.Tests.Nwis.Site;
 
@@ -30,7 +30,7 @@ public class NwisSiteRequestBuilderTest
         "Given a county code, When a parameters are built, Then the resulting Uri should have the county state code")]
     public void TestCountyCodeUri()
     {
-        var code = new NwisCountyCode()
+        var code = new NwisCountyCode
         {
             Code = "48453",
             Label = "Travis County"
@@ -50,7 +50,7 @@ public class NwisSiteRequestBuilderTest
         "Given a hydrologic unit code, When a parameters are built, Then the resulting Uri should have the HUC")]
     public void TestHucUri()
     {
-        var code = new NwisHydrologicUnitCodes()
+        var code = new NwisHydrologicUnitCodes
         {
             Code = "12",
             Label = "Brazos headwaters"

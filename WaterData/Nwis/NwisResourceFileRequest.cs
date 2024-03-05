@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
 using WaterData.Extensions;
+using WaterData.Request;
 using WaterData.Serializers;
 
-namespace WaterData.Request;
+namespace WaterData.Nwis;
 
-public class NwisResourceFileRequest<T>: IWaterDataEnumerableRequest<T>
+public class NwisResourceFileRequest<T> : IWaterDataEnumerableRequest<T>
 {
     private readonly string _fileName;
 
@@ -18,13 +19,13 @@ public class NwisResourceFileRequest<T>: IWaterDataEnumerableRequest<T>
 
     public Uri Uri => new($"file://{_fileName}");
 
-    public async Task<IEnumerable<T>> GetAsync(CancellationToken cancellationToken = new ())
+    public async Task<IEnumerable<T>> GetAsync(CancellationToken cancellationToken = new())
     {
         var stream = await GetStreamAsync(cancellationToken);
         return await RdbReader.ReadAsync(stream, _whereClauseDelegate, cancellationToken);
     }
 
-    public async Task<Stream> GetStreamAsync(CancellationToken cancellationToken = new CancellationToken())
+    public async Task<Stream> GetStreamAsync(CancellationToken cancellationToken = new())
     {
         return await Assembly.GetExecutingAssembly().GetResourceStream(_fileName);
     }

@@ -1,6 +1,6 @@
 using CsvHelper.Configuration.Attributes;
 
-namespace WaterData.Models;
+namespace WaterData.Nwis.Models;
 
 public interface INwisSite
 {
@@ -29,9 +29,8 @@ public interface INwisSite
     public string? HydrologicUnitCode { get; set; }
 }
 
-public sealed class NwisSite: INwisSite
+public sealed class NwisSite : INwisSite
 {
-
     /*
     #  agency_cd       -- Agency
     #  site_no         -- Site identification number
@@ -47,40 +46,27 @@ public sealed class NwisSite: INwisSite
     #  huc_cd          -- Hydrologic unit code
     */
 
-    [Name("agency_cd")]
-    public string? AgencyCode { get; set; }
+    [Name("agency_cd")] public string? AgencyCode { get; set; }
 
-    [Name("site_no")]
-    public long SiteNumber { get; set; }
+    [Name("site_no")] public long SiteNumber { get; set; }
 
-    [Name("station_nm")]
-    public string? SiteName { get; set; }
+    [Name("station_nm")] public string? SiteName { get; set; }
 
-    [Name("site_tp_cd")]
-    public string? SiteType { get; set; }
+    [Name("site_tp_cd")] public string? SiteType { get; set; }
 
-    [Name("dec_lat_va")]
-    public double? Latitude { get; set; }
+    [Name("dec_lat_va")] public double? Latitude { get; set; }
 
-    [Name("dec_long_va")]
-    public double? Longitude { get; set; }
+    [Name("dec_long_va")] public double? Longitude { get; set; }
 
-    [Name("coord_acy_cd")]
-    public string? LatLongAccuracy { get; set; }
+    [Name("coord_acy_cd")] public string? LatLongAccuracy { get; set; }
 
-    [Name("dec_coord_datum_cd")]
-    public string? LatLongDatum { get; set; }
+    [Name("dec_coord_datum_cd")] public string? LatLongDatum { get; set; }
 
-    [Name("alt_va")]
-    public double? Altitude { get; set; }
+    [Name("alt_va")] public double? Altitude { get; set; }
 
-    [Name("alt_acy_va")]
-    public double? AltitudeAccuracy { get; set; }
+    [Name("alt_acy_va")] public double? AltitudeAccuracy { get; set; }
 
-    [Name("alt_datum_cd")]
-    public string? AltitudeDatum { get; set; }
+    [Name("alt_datum_cd")] public string? AltitudeDatum { get; set; }
 
-    [Name("huc_cd")]
-    public string? HydrologicUnitCode { get; set; }
-
+    [Name("huc_cd")] public string? HydrologicUnitCode { get; set; }
 }

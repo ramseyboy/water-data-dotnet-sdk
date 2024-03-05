@@ -1,6 +1,6 @@
 using NetTopologySuite.Geometries;
-using WaterData.Models.Codes;
-using WaterData.Request;
+using WaterData.Nwis;
+using WaterData.Nwis.Models.Codes;
 
 namespace WaterData.Tests.Nwis.Site;
 
@@ -30,7 +30,7 @@ public class NwisSiteRequestTest
         "Given a hydrologic unit code, When a request are built, Then the resulting response should have only the sites with the HUC")]
     public async Task TestHucRequest()
     {
-        var code = new NwisHydrologicUnitCodes()
+        var code = new NwisHydrologicUnitCodes
         {
             Code = "12",
             Label = "Brazos headwaters"

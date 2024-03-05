@@ -1,5 +1,5 @@
-﻿using WaterData.Models.Codes;
-using WaterData.Request;
+﻿using WaterData.Nwis;
+using WaterData.Nwis.Models.Codes;
 
 namespace WaterData.Tests.Nwis;
 
@@ -29,7 +29,8 @@ public class NwisRequestBuilderTest
         Assert.NotEmpty(sites);
     }
 
-    [Fact(DisplayName = "Given a valid request for county codes, When sent, Then a list of valid 'NwisCode' should be returned")]
+    [Fact(DisplayName =
+        "Given a valid request for county codes, When sent, Then a list of valid 'NwisCode' should be returned")]
     public async Task TestGetCountyCodes()
     {
         var request = NwisRequestBuilder
@@ -42,7 +43,8 @@ public class NwisRequestBuilderTest
         Assert.NotEmpty(codes);
     }
 
-    [Fact(DisplayName = "Given a valid request for state codes, When sent, Then a list of valid 'NwisCode' should be returned")]
+    [Fact(DisplayName =
+        "Given a valid request for state codes, When sent, Then a list of valid 'NwisCode' should be returned")]
     public async Task TestGetStateCodes()
     {
         var request = NwisRequestBuilder
@@ -55,7 +57,8 @@ public class NwisRequestBuilderTest
         Assert.NotEmpty(codes);
     }
 
-    [Fact(DisplayName = "Given a valid request for hydrologic codes, When sent, Then a list of valid 'NwisCode' should be returned")]
+    [Fact(DisplayName =
+        "Given a valid request for hydrologic codes, When sent, Then a list of valid 'NwisCode' should be returned")]
     public async Task TestGetHydrologicUnitCodes()
     {
         var request = NwisRequestBuilder
@@ -68,7 +71,8 @@ public class NwisRequestBuilderTest
         Assert.NotEmpty(codes);
     }
 
-    [Fact(DisplayName = "Given a valid request for Agency codes, When sent, Then a list of valid 'NwisCode' should be returned")]
+    [Fact(DisplayName =
+        "Given a valid request for Agency codes, When sent, Then a list of valid 'NwisCode' should be returned")]
     public async Task TestGetAgencyCodes()
     {
         var request = NwisRequestBuilder
@@ -81,7 +85,8 @@ public class NwisRequestBuilderTest
         Assert.NotEmpty(codes);
     }
 
-    [Fact(DisplayName = "Given a valid request for Aquifer codes, When sent, Then a list of valid 'NwisCode' should be returned")]
+    [Fact(DisplayName =
+        "Given a valid request for Aquifer codes, When sent, Then a list of valid 'NwisCode' should be returned")]
     public async Task TestGetAquiferCodes()
     {
         var request = NwisRequestBuilder
@@ -94,7 +99,8 @@ public class NwisRequestBuilderTest
         Assert.NotEmpty(codes);
     }
 
-    [Fact(DisplayName = "Given a valid request for Local Aquifer codes, When sent, Then a list of valid 'NwisCode' should be returned")]
+    [Fact(DisplayName =
+        "Given a valid request for Local Aquifer codes, When sent, Then a list of valid 'NwisCode' should be returned")]
     public async Task TestGetLocalAquiferCodes()
     {
         var request = NwisRequestBuilder
@@ -107,7 +113,8 @@ public class NwisRequestBuilderTest
         Assert.NotEmpty(codes);
     }
 
-    [Fact(DisplayName = "Given a valid request for SiteType codes, When sent, Then a list of valid 'NwisCode' should be returned")]
+    [Fact(DisplayName =
+        "Given a valid request for SiteType codes, When sent, Then a list of valid 'NwisCode' should be returned")]
     public async Task TestGetSiteTypeCodes()
     {
         var request = NwisRequestBuilder
@@ -120,7 +127,8 @@ public class NwisRequestBuilderTest
         Assert.NotEmpty(codes);
     }
 
-    [Fact(DisplayName = "Given a valid request for Parameter codes, When sent, Then a list of valid 'NwisCode' should be returned")]
+    [Fact(DisplayName =
+        "Given a valid request for Parameter codes, When sent, Then a list of valid 'NwisCode' should be returned")]
     public async Task TestGetParameterCodes()
     {
         var request = NwisRequestBuilder
@@ -133,7 +141,8 @@ public class NwisRequestBuilderTest
         Assert.NotEmpty(codes);
     }
 
-    [Fact(DisplayName = "Given a valid request for Parameter codes only for organics, When sent, Then a list of valid 'NwisCode' should be returned")]
+    [Fact(DisplayName =
+        "Given a valid request for Parameter codes only for organics, When sent, Then a list of valid 'NwisCode' should be returned")]
     public async Task TestGetParameterOrganicCodes()
     {
         var request = NwisRequestBuilder
@@ -147,7 +156,8 @@ public class NwisRequestBuilderTest
         Assert.NotEmpty(codes);
     }
 
-    [Fact(DisplayName = "Given a valid request for data collection codes only for organics, When sent, Then a list of valid 'NwisCode' should be returned")]
+    [Fact(DisplayName =
+        "Given a valid request for data collection codes only for organics, When sent, Then a list of valid 'NwisCode' should be returned")]
     public async Task TestGetDataCollectionCodes()
     {
         var request = NwisRequestBuilder

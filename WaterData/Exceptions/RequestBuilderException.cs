@@ -3,7 +3,7 @@
 namespace WaterData.Exceptions;
 
 [Serializable]
-public class RequestBuilderException: ArgumentException
+public class RequestBuilderException : ArgumentException
 {
     public RequestBuilderException()
     {
@@ -25,7 +25,8 @@ public class RequestBuilderException: ArgumentException
     {
     }
 
-    public RequestBuilderException(string? message, string? paramName, Exception? innerException) : base(message, paramName, innerException)
+    public RequestBuilderException(string? message, string? paramName, Exception? innerException) : base(message,
+        paramName, innerException)
     {
     }
 }

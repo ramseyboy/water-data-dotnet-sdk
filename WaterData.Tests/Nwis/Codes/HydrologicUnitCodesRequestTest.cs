@@ -1,5 +1,5 @@
-using WaterData.Request;
-using WaterData.Request.Codes;
+using WaterData.Nwis;
+using WaterData.Nwis.Codes;
 
 namespace WaterData.Tests.Nwis.Codes;
 

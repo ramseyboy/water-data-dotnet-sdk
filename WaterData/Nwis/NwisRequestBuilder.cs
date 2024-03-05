@@ -1,21 +1,22 @@
 ﻿using WaterData.Exceptions;
-using WaterData.Models.Codes;
-using WaterData.Request.Codes;
-using WaterData.Request.Site;
+using WaterData.Nwis.Codes;
+using WaterData.Nwis.Models.Codes;
+using WaterData.Nwis.Site;
+using WaterData.Request;
 
-namespace WaterData.Request;
+namespace WaterData.Nwis;
 
-public class NwisRequestBuilder: WaterDataRequestBuilder
+public class NwisRequestBuilder : WaterDataRequestBuilder
 {
     public const string ApiUrl = "https://waterservices.usgs.gov/nwis";
+
+    private NwisRequestBuilder()
+    {
+    }
 
     public static NwisRequestBuilder Builder()
     {
         return new NwisRequestBuilder();
-    }
-
-    private NwisRequestBuilder()
-    {
     }
 
     public NwisSiteRequestBuilder Sites()
@@ -80,6 +81,7 @@ public class NwisRequestBuilder: WaterDataRequestBuilder
 
     public override IWaterDataRequest BuildRequest()
     {
-        throw new RequestBuilderException("Invalid builder, call one of the builder methods to continue building an NWIS request.");
+        throw new RequestBuilderException(
+            "Invalid builder, call one of the builder methods to continue building an NWIS request.");
     }
 }

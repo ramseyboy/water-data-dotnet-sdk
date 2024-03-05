@@ -1,5 +1,5 @@
 using System.Text;
-using WaterData.Models;
+using WaterData.Nwis.Models;
 using WaterData.Serializers;
 
 namespace WaterData.Tests.Serializers;

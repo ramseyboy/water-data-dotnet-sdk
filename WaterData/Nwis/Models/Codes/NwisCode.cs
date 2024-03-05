@@ -1,4 +1,4 @@
-﻿namespace WaterData.Models.Codes;
+﻿namespace WaterData.Nwis.Models.Codes;
 
 public interface NwisCode
 {

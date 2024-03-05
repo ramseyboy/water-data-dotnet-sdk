@@ -1,7 +1,7 @@
 using WaterData.Exceptions;
-using WaterData.Models.Codes;
+using WaterData.Nwis.Models.Codes;
 
-namespace WaterData.Request.Codes;
+namespace WaterData.Nwis.Codes;
 
 public enum HydrologicUnitCodeTypes
 {
@@ -12,11 +12,10 @@ public enum HydrologicUnitCodeTypes
 
 public class NwisHydrologicUnitCodesRequestBuilder : NwisCodesRequestBuilder<NwisHydrologicUnitCodes>
 {
-    private HydrologicUnitCodeTypes _types = HydrologicUnitCodeTypes.All;
-
     private string[] _basinNames = Array.Empty<string>();
 
     private string[] _exactCodes = Array.Empty<string>();
+    private HydrologicUnitCodeTypes _types = HydrologicUnitCodeTypes.All;
 
     internal NwisHydrologicUnitCodesRequestBuilder(string fileName) : base(fileName)
     {

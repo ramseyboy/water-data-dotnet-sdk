@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
-using System.Reflection;
 
 namespace WaterData.Extensions;
 
-public static class EnumExtensions {
+public static class EnumExtensions
+{
     public static string GetDescription<T>(this T enumerationValue)
         where T : struct
     {
@@ -26,8 +26,9 @@ public static class EnumExtensions {
         if (attrs != null && attrs.Length > 0)
         {
             //Pull out the description value
-            return ((DescriptionAttribute)attrs[0]).Description;
+            return ((DescriptionAttribute) attrs[0]).Description;
         }
+
         //If we have no description attribute, just return the ToString of the enum
         return enumerationValue.ToString();
     }
