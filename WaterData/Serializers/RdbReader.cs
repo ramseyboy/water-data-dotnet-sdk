@@ -7,7 +7,7 @@ namespace WaterData.Serializers;
 
 public static class RdbReader
 {
-    public static async Task<IEnumerable<T>> ReadAsync<T>(Stream stream, CancellationToken cancellationToken = new())
+    public static async Task<IEnumerable<T>> ReadAsync<T>(Stream stream, Func<T, bool>? whereClauseDelegate = null, CancellationToken cancellationToken = new())
     {
         using var reader = new StreamReader(stream);
         var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -18,6 +18,8 @@ public static class RdbReader
         };
         using var csv = new CsvReader(reader, configuration);
         var asyncEnum = csv.GetRecordsAsync<T>(cancellationToken);
-        return await asyncEnum.ToListAsync(cancellationToken);
+        return await asyncEnum
+            .Where(whereClauseDelegate ?? (_ => true) )
+            .ToListAsync(cancellationToken);
     }
 }

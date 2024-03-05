@@ -3,7 +3,7 @@ using WaterData.Models.Codes;
 
 namespace WaterData.Request.Codes;
 
-public class NwisCodesRequestBuilder<T>: IWaterDataRequestBuilder<T> where T: NwisCode
+public class NwisCodesRequestBuilder<T>: WaterDataRequestBuilder where T: NwisCode
 {
     private readonly string _fileName;
 
@@ -12,12 +12,14 @@ public class NwisCodesRequestBuilder<T>: IWaterDataRequestBuilder<T> where T: Nw
         _fileName = fileName;
     }
 
-    public IWaterDataRequest<T> BuildRequest()
+    public override IWaterDataEnumerableRequest<T> BuildRequest()
     {
         if (string.IsNullOrEmpty(_fileName))
         {
             throw new RequestBuilderException("Must specify some type of code to retrieve in code request builder, found nothing.", nameof(_fileName));
         }
-        return new NwisResourceFileRequest<T>(_fileName);
+        return new NwisResourceFileRequest<T>(_fileName, WhereClauseDelegate);
     }
+
+    protected virtual Func<T, bool>? WhereClauseDelegate => null;
 }

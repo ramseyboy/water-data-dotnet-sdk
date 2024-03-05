@@ -29,7 +29,7 @@ public class NwisHttpRequest<T>: IWaterDataHttpRequest<T>
 
     public async Task<IEnumerable<T>> GetAsync(CancellationToken cancellationToken = new())
     {
-        return await RdbReader.ReadAsync<T>(await GetStreamAsync(cancellationToken), cancellationToken);
+        return await RdbReader.ReadAsync<T>(await GetStreamAsync(cancellationToken), cancellationToken: cancellationToken);
     }
 
     public async Task<HttpResponseMessage> GetHttpResponseAsync(CancellationToken cancellationToken = new())

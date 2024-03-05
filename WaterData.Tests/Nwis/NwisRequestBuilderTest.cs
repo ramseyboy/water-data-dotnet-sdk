@@ -1,8 +1,9 @@
 ﻿using WaterData.Models.Codes;
 using WaterData.Request;
 
-namespace WaterData.Tests.Request;
+namespace WaterData.Tests.Nwis;
 
+[Collection("IntegrationTest")]
 public class NwisRequestBuilderTest
 {
     [Fact(DisplayName = "Given a valid request, When sent, Then a list of valid 'NwisSites' should be returned")]

@@ -7,7 +7,7 @@
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
         <OutputType>Library</OutputType>
-        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+        <TargetFrameworks>net8.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -33,5 +33,9 @@
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </EmbeddedResource>
     </ItemGroup>
+
+    <Target Name="CoverageReport" AfterTargets="VSTest">
+        <Exec Command="dotnet reportgenerator '-reports:**/coverage.cobertura.xml' '-targetdir:coverage' '-reporttypes:HtmlInline;Cobertura;Badges'" />
+    </Target>
 
 </Project>

@@ -10,7 +10,7 @@ using WaterData.Models.Codes;
 
 namespace WaterData.Request.Site;
 
-public class NwisSiteRequestBuilder: IWaterDataRequestBuilder<NwisSite>
+public class NwisSiteRequestBuilder: WaterDataRequestBuilder
 {
     private const string UrlPath = "/site";
 
@@ -324,7 +324,7 @@ public class NwisSiteRequestBuilder: IWaterDataRequestBuilder<NwisSite>
         return this;
     }
 
-    public IWaterDataRequest<NwisSite> BuildRequest()
+    public override IWaterDataHttpRequest<NwisSite> BuildRequest()
     {
         var fieldDict = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
             .Where(f => f.GetValue(this) is not null)
@@ -371,7 +371,7 @@ public class NwisSiteRequestBuilder: IWaterDataRequestBuilder<NwisSite>
 
         if (_boundingBox is not null && _boundingBox.Area != 0.0)
         {
-            sb.Append($"{fieldDict[nameof(_stateCode)].Name}={_boundingBox.MinX},{_boundingBox.MinY},{_boundingBox.MaxX},{_boundingBox.MaxY}");
+            sb.Append($"{fieldDict[nameof(_boundingBox)].Name}={_boundingBox.MinX},{_boundingBox.MinY},{_boundingBox.MaxX},{_boundingBox.MaxY}");
             sb.Append('&');
         }
 
@@ -519,5 +519,10 @@ public class NwisSiteRequestBuilder: IWaterDataRequestBuilder<NwisSite>
         };
 
         return new NwisHttpRequest<NwisSite>(builder.Uri);
+    }
+
+    public IWaterDataRequest BuildRequest<T>() where T : IWaterDataRequest
+    {
+        throw new NotImplementedException();
     }
 }

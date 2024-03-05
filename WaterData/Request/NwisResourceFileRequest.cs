@@ -4,7 +4,7 @@ using WaterData.Serializers;
 
 namespace WaterData.Request;
 
-public class NwisResourceFileRequest<T>: IWaterDataRequest<T>
+public class NwisResourceFileRequest<T>: IWaterDataEnumerableRequest<T>
 {
     private readonly string _fileName;
 
@@ -21,12 +21,7 @@ public class NwisResourceFileRequest<T>: IWaterDataRequest<T>
     public async Task<IEnumerable<T>> GetAsync(CancellationToken cancellationToken = new ())
     {
         var stream = await GetStreamAsync(cancellationToken);
-        var codes = await RdbReader.ReadAsync<T>(stream, cancellationToken);
-        if (_whereClauseDelegate is not null)
-        {
-            codes = codes.Where(_whereClauseDelegate).ToList();
-        }
-        return codes.ToList();
+        return await RdbReader.ReadAsync(stream, _whereClauseDelegate, cancellationToken);
     }
 
     public async Task<Stream> GetStreamAsync(CancellationToken cancellationToken = new CancellationToken())

@@ -5,7 +5,7 @@ using WaterData.Request.Site;
 
 namespace WaterData.Request;
 
-public class NwisRequestBuilder: IWaterDataRequestBuilder<object>
+public class NwisRequestBuilder: WaterDataRequestBuilder
 {
     public const string ApiUrl = "https://waterservices.usgs.gov/nwis";
 
@@ -35,10 +35,10 @@ public class NwisRequestBuilder: IWaterDataRequestBuilder<object>
         return new NwisCodesRequestBuilder<NwisStateCode>(fileName);
     }
 
-    public NwisCodesRequestBuilder<NwisHydrologicUnitCodes> HydrologicUnitCodes()
+    public NwisHydrologicUnitCodesRequestBuilder HydrologicUnitCodes()
     {
         const string fileName = "hydrologic_unit_codes.tsv";
-        return new NwisCodesRequestBuilder<NwisHydrologicUnitCodes>(fileName);
+        return new NwisHydrologicUnitCodesRequestBuilder(fileName);
     }
 
     public NwisCodesRequestBuilder<NwisAgencyCode> AgencyCodes()
@@ -49,7 +49,8 @@ public class NwisRequestBuilder: IWaterDataRequestBuilder<object>
 
     public NwisParameterCodesRequestBuilder ParameterCodes()
     {
-        return new NwisParameterCodesRequestBuilder();
+        const string fileName = "parameter_cd_query.tsv";
+        return new NwisParameterCodesRequestBuilder(fileName);
     }
 
     public NwisCodesRequestBuilder<NwisAquiferCode> AquiferCodes()
@@ -77,7 +78,7 @@ public class NwisRequestBuilder: IWaterDataRequestBuilder<object>
         return new NwisCodesRequestBuilder<NwisSiteTypeCode>(fileName);
     }
 
-    public IWaterDataRequest<object> BuildRequest()
+    public override IWaterDataRequest BuildRequest()
     {
         throw new RequestBuilderException("Invalid builder, call one of the builder methods to continue building an NWIS request.");
     }
